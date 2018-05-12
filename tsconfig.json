@@ -1,0 +1,19 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "strict": true,
+        "strictPropertyInitialization": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "noFallthroughCasesInSwitch": true,
+        "outDir": "out/js/",
+        "sourceMap": true,
+        "allowJs": true,
+        "baseUrl": "src/ts/"
+    },
+    "include": [
+        "src/ts/**/*"
+    ]
+}

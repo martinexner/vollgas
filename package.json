@@ -1,0 +1,30 @@
+{
+  "name": "vollgas",
+  "version": "1.0.0",
+  "description": "A logic gate circuit simulator for web browsers and Node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "nearleyc src/grammar/grammar.ne -o out/grammar/grammar.js && tsc && webpack -d --progress --display-modules=true",
+    "build-prod": "nearleyc src/grammar/grammar.ne -o out/grammar/grammar.js && tsc && webpack -p --progress --display-modules=true"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinexner/vollgas.git"
+  },
+  "author": "Martin Exner",
+  "license": "AGPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/martinexner/vollgas/issues"
+  },
+  "homepage": "https://martinexner.github.io/vollgas",
+  "devDependencies": {
+    "@types/nearley": "^2.11.0",
+    "@types/node": "^10.0.6",
+    "@types/pixi.js": "^4.7.3",
+    "@types/webassembly-js-api": "0.0.1",
+    "nearley": "^2.13.0",
+    "typescript": "^2.8.3",
+    "webpack": "^4.8.1",
+    "webpack-cli": "^2.1.3"
+  }
+}
