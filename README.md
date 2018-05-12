@@ -43,11 +43,11 @@ By default, the demo will slowly simulate running `R0 = R0 + 1` in an endless lo
 4. Circuit description: `docs/demo.html#<grammar>` \
    Simulates any circuit described using the circuit description grammar. See [Grammar](#grammar) for details.
 
-### Microcode<a id="microcode"></a>
+### Microcode
 
 The Micro16 microcode consist of one or more microinstructions, each 32 bits in length. The microinstruction layout is the original Micro16 microinstruction layout with those bits responsible for external memory access ignored:
 
-| bit | description           | bit | description       |
+| bit | usage                 | bit | usage             |
 |----:|:----------------------|----:|:------------------|
 | 0   | unused                | 16  | B register        |
 | 1   | conditional branching | 17  | B register        |
@@ -66,9 +66,9 @@ The Micro16 microcode consist of one or more microinstructions, each 32 bits in 
 | 14  | S register            | 30  | branching address |
 | 15  | S register            | 31  | branching address |
 
-### Grammar<a id="grammar"></a>
+### Grammar
 
-There is a grammar defined in `grammar/grammar.ne` which can be used to describe any circuit for simulation. For example, the [circular NOR demo](https://martinexner.github.io/vollgas/demo.html#n0*nor*@100:100*p+50:p~p:p+50~n:p~n-50:n~n0) is described as `n0*nor*@100:100*p+50:p~p:p+50~n:p~n-50:n~n0`, which translates to:
+There is a grammar defined in `src/grammar/grammar.ne` which can be used to describe any circuit for simulation. For example, the [circular NOR demo](https://martinexner.github.io/vollgas/demo.html#n0*nor*@100:100*p+50:p~p:p+50~n:p~n-50:n~n0) is described as `n0*nor*@100:100*p+50:p~p:p+50~n:p~n-50:n~n0`, which translates to:
 - a gate with identifier `n0`
 - of type `nor`
 - located at `(100, 100)` in the visualization canvas
