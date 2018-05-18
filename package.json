@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A logic gate circuit simulator for web browsers and Node.js",
   "scripts": {
-    "test": "echo \"Warning: no test specified\" && exit 0",
+    "test": "npm run build-prod",
     "build": "nearleyc src/grammar/grammar.ne -o out/grammar/grammar.js && tsc && webpack -d --progress --display-modules=true",
     "build-prod": "nearleyc src/grammar/grammar.ne -o out/grammar/grammar.js && tsc && webpack -p --progress --display-modules=true"
   },
