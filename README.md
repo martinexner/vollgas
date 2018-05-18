@@ -1,5 +1,7 @@
 # vollgas
 
+[![Build Status](https://travis-ci.org/martinexner/vollgas.svg?branch=master)](https://travis-ci.org/martinexner/vollgas)
+
 ## What
 
 vollgas is a very basic, completely browser-based simulator for logic gates and circuits thereof.
@@ -40,7 +42,10 @@ By default, the demo will slowly simulate running `R0 = R0 + 1` in an endless lo
 3. Fast microcode simulation: `docs/demo.html#fast:<hexdigits>` \
    Like the above, but with zero-delay wires and faster.
 
-4. Circuit description: `docs/demo.html#<grammar>` \
+4. Circuit description via JSON: `docs/demo.html#json:<json>` \
+   Simulates any circuit described using the circuit description JSON format. See [JSON](#json) for details.
+
+5. Circuit description via grammar: `docs/demo.html#<grammar>` \
    Simulates any circuit described using the circuit description grammar. See [Grammar](#grammar) for details.
 
 ### Microcode
@@ -66,18 +71,89 @@ The Micro16 microcode consist of one or more microinstructions, each 32 bits in 
 | 14  | S register            | 30  | branching address |
 | 15  | S register            | 31  | branching address |
 
+### JSON
+
+Any circuit can be described for simulation using JSON. For example, the [circular NOR demo](https://martinexner.github.io/vollgas/demo.html#json:{"config":[],"elements":[{"name":"n0","type":"nor","parameters":[],"base":{"x":100,"y":100},"outsideInputs":[],"externalOutputs":[],"wires":[{"outputIndex":null,"more":null,"coordinates":[{"x":{"delta":50,"from":"prev"},"y":"prev"},{"x":"prev","y":{"delta":50,"from":"prev"}},{"x":"next","y":"prev"},{"x":{"delta":-50,"from":"next"},"y":"next"},{"name":"n0","connector":"input","index":null}],"initialValue":null}]}]}) can be described as:
+
+```json
+{
+    "config": [],
+    "elements": [
+        {
+            "name": "n0",
+            "type": "nor",
+            "parameters": [],
+            "base": {
+                "x": 100,
+                "y": 100
+            },
+            "outsideInputs": [],
+            "externalOutputs": [],
+            "wires": [
+                {
+                    "outputIndex": null,
+                    "more": null,
+                    "coordinates": [
+                        {
+                            "x": {
+                                "delta": 50,
+                                "from": "prev"
+                            },
+                            "y": "prev"
+                        },
+                        {
+                            "x": "prev",
+                            "y": {
+                                "delta": 50,
+                                "from": "prev"
+                            }
+                        },
+                        {
+                            "x": "next",
+                            "y": "prev"
+                        },
+                        {
+                            "x": {
+                                "delta": -50,
+                                "from": "next"
+                            },
+                            "y": "next"
+                        },
+                        {
+                            "name": "n0",
+                            "connector": "input",
+                            "index": null
+                        }
+                    ],
+                    "initialValue": null
+                }
+            ]
+        }
+    ]
+}
+```
+
+Which translates to:
+- a gate with name `n0`
+- of type `nor`
+- based at `(100, 100)` in the visualization canvas
+- with one wire going from the coordinates of its next unconnected output (= output 0) ...
+  1. ... to a point whose X coordinate is the previous point's X coordinate plus 50 and whose Y coordinate is the same as the previous point's Y coordinate (= go 50 pixels to the right), ...
+  2. ... to a point whose X coordinate is the same as the previous point's X coordinate and whose Y coordinate is the previous point's Y coordinate plus 50 (= go 50 pixels down), ...
+  3. ... to a point whose X coordinate is the same as the next point's X coordinate and whose Y coordinate is the same as the previous point's Y coordinate (= go to the left), ...
+  4. ... to a point whose X coordinate is the next point's X coordinate minus 50 and whose Y coordinate is the same as the next points Y coordinate (= go up), ...
+  5. ... and finally into the next free input connector of the gate with name `n0`.
+
+The typescript type for this is `GrammarParser.Parsed`, see `src/ts/grammar/GrammarParser.ts`.
+
+Removing line feeds and indentation of this JSON object leaves us with the following single line, which can be passed to `docs/demo.html` via the fragment identifier for running the [circular NOR demo](https://martinexner.github.io/vollgas/demo.html#json:{"config":[],"elements":[{"name":"n0","type":"nor","parameters":[],"base":{"x":100,"y":100},"outsideInputs":[],"externalOutputs":[],"wires":[{"outputIndex":null,"more":null,"coordinates":[{"x":{"delta":50,"from":"prev"},"y":"prev"},{"x":"prev","y":{"delta":50,"from":"prev"}},{"x":"next","y":"prev"},{"x":{"delta":-50,"from":"next"},"y":"next"},{"name":"n0","connector":"input","index":null}],"initialValue":null}]}]}):
+``` json
+{"config":[],"elements":[{"name":"n0","type":"nor","parameters":[],"base":{"x":100,"y":100},"outsideInputs":[],"externalOutputs":[],"wires":[{"outputIndex":null,"more":null,"coordinates":[{"x":{"delta":50,"from":"prev"},"y":"prev"},{"x":"prev","y":{"delta":50,"from":"prev"}},{"x":"next","y":"prev"},{"x":{"delta":-50,"from":"next"},"y":"next"},{"name":"n0","connector":"input","index":null}],"initialValue":null}]}]}
+```
+
 ### Grammar
 
-There is a grammar defined in `src/grammar/grammar.ne` which can be used to describe any circuit for simulation. For example, the [circular NOR demo](https://martinexner.github.io/vollgas/demo.html#n0*nor*@100:100*p+50:p~p:p+50~n:p~n-50:n~n0) is described as `n0*nor*@100:100*p+50:p~p:p+50~n:p~n-50:n~n0`, which translates to:
-- a gate with identifier `n0`
-- of type `nor`
-- located at `(100, 100)` in the visualization canvas
-- with a wire going from the coordinates of output 0 ...
-  1. ... to `(p+50, p)`, which means the new X coordinate will be the previous X coordinate plus 50 and the Y coordinate stays the same (= go 50 pixels to the right), ...
-  2. ... to `(p, p+50)` (= go 50 pixels down) ...
-  3. ... to `(n, p)`, which means the new X coordinate is the same as the X coordinate after that and the Y coordinate stays the same (= go to the left), ...
-  4. ... to `(n-50, n)`, which means the new X coordinate is the same as the X coordinate after that minus 50 and the new Y coordinate is the same as the Y coordinate after that (= go up), ...
-  5. ... and finally into the next free input of the gate with identifier `n0`
+There is a grammar defined in `src/grammar/grammar.ne` which, like the [JSON](#json) format, can be used to describe any circuit for simulation, but in a much more compact way. For example, the same [circular NOR demo](https://martinexner.github.io/vollgas/demo.html#n0*nor*@100:100*p+50:p~p:p+50~n:p~n-50:n~n0) as used in the [JSON](#json) section above can be described as `n0*nor*@100:100*p+50:p~p:p+50~n:p~n-50:n~n0` using the grammar, which translates to the exact same circuit as in the [JSON](#json) section above. In fact, during simulation setup, parsing this description via the grammar yields the exact same object as is represented using JSON above.
 
 ### Internals
 

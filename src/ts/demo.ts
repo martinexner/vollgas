@@ -37,7 +37,14 @@ if(desc.match(/^[0-9A-Fa-f]+$/) && (desc.length % 8) === 0) {
 
 }
 
-let parsed = GrammarParser.parse([desc]);
+let parsed: GrammarParser.ParseResult;
+
+if(desc.startsWith("json:")) {
+    desc = desc.substring("json:".length);
+    parsed = GrammarParser.fromParsed(JSON.parse(desc));
+} else {
+    parsed = GrammarParser.parse([desc]);
+}
 
 if(parsed.disableGraphics) {
     disableGraphics = true;

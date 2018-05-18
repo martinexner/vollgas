@@ -29,7 +29,7 @@ const grammar = require("../../grammar/grammar.js");
 
 export class GrammarParser {
 
-    public static parse(descriptions: string[], noElementInstancesForTesting: boolean = false, knownElementNames: string[] = []) {
+    public static parse(descriptions: string[], noElementInstancesForTesting: boolean = false, knownElementNames: string[] = []): GrammarParser.ParseResult {
 
         let parsedElements = new Array<GrammarParser.Element[]>(descriptions.length);
         let parsedConfigs = new Array<GrammarParser.Parameter[]>(descriptions.length);
@@ -57,6 +57,12 @@ export class GrammarParser {
         if(!parsed.elements.length) {
             throw new Error("nothing parsed");
         }
+
+        return GrammarParser.fromParsed(parsed, noElementInstancesForTesting, knownElementNames);
+
+    }
+
+    public static fromParsed(parsed: GrammarParser.Parsed, noElementInstancesForTesting: boolean = false, knownElementNames: string[] = []): GrammarParser.ParseResult {
 
         let elements = parsed.elements;
 
@@ -832,5 +838,18 @@ export namespace GrammarParser {
     export interface OutputsMap {
         [index: number]: true;
     }
+
+    //
+
+    export type ParseResult = {
+        height: number;
+        stepsPerSecond: number|undefined;
+        cyclesPerStep: number|undefined;
+        delayPerWindowHeight: number|undefined;
+        echoData: boolean;
+        echoFunctions: boolean;
+        disableGraphics: boolean;
+        wiringDescriptions: CombinedGraphicalElement.WiringDescription[];
+    };
 
 }
