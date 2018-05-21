@@ -27,7 +27,7 @@ To build the demo:
 3. Install dependencies by running `npm install`
 4. Build the project by running `npm run build` (or `npm run build-prod` for a production build)
 
-Step 4 will first compile the typescript files to javascript and then bundle them together via [webpack](https://webpack.js.org/). The resulting javascript bundle will be written to `docs/demo.js`. Open `docs/demo.html` in a browser to run the default demo or `docs/index.html` to see all demo circuits.
+Step 4 will first compile the typescript files to javascript and then bundle them together via [webpack](https://webpack.js.org/). The resulting javascript bundle will be written to `docs/vollgas.js`. Open `docs/demo.html` in a browser to run the default demo or `docs/index.html` to see all demo circuits.
 
 ### Using the demo
 
@@ -147,13 +147,17 @@ Which translates to:
 The typescript type for this is `GrammarParser.Parsed`, see `src/ts/grammar/GrammarParser.ts`.
 
 Removing line feeds and indentation of this JSON object leaves us with the following single line, which can be passed to `docs/demo.html` via the fragment identifier for running the [circular NOR demo](https://martinexner.github.io/vollgas/demo.html#json:{"config":[],"elements":[{"name":"n0","type":"nor","parameters":[],"base":{"x":100,"y":100},"outsideInputs":[],"externalOutputs":[],"wires":[{"outputIndex":null,"more":null,"coordinates":[{"x":{"delta":50,"from":"prev"},"y":"prev"},{"x":"prev","y":{"delta":50,"from":"prev"}},{"x":"next","y":"prev"},{"x":{"delta":-50,"from":"next"},"y":"next"},{"name":"n0","connector":"input","index":null}],"initialValue":null}]}]}):
-``` json
+```json
 {"config":[],"elements":[{"name":"n0","type":"nor","parameters":[],"base":{"x":100,"y":100},"outsideInputs":[],"externalOutputs":[],"wires":[{"outputIndex":null,"more":null,"coordinates":[{"x":{"delta":50,"from":"prev"},"y":"prev"},{"x":"prev","y":{"delta":50,"from":"prev"}},{"x":"next","y":"prev"},{"x":{"delta":-50,"from":"next"},"y":"next"},{"name":"n0","connector":"input","index":null}],"initialValue":null}]}]}
 ```
 
 ### Grammar
 
 There is a grammar defined in `src/grammar/grammar.ne` which, like the [JSON](#json) format, can be used to describe any circuit for simulation, but in a much more compact way. For example, the same [circular NOR demo](https://martinexner.github.io/vollgas/demo.html#n0*nor*@100:100*p+50:p~p:p+50~n:p~n-50:n~n0) as used in the [JSON](#json) section above can be described as `n0*nor*@100:100*p+50:p~p:p+50~n:p~n-50:n~n0` using the grammar, which translates to the exact same circuit as in the [JSON](#json) section above. In fact, during simulation setup, parsing this description via the grammar yields the exact same object as is represented using JSON above.
+
+### Using the JavaScript API
+
+See `src/ts/Vollgas.ts`. Also see the source of the [circular NOR javascript API demo](https://martinexner.github.io/vollgas/apidemo.html) and the [manually-stepped circular NOR javascript API demo](https://martinexner.github.io/vollgas/apidemo_manual.html).
 
 ### Internals
 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>vollgas demo</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script>
+        <script src="vollgas.js"></script>
+    </head>
+    <body style="margin: 0; padding: 0; overflow: hidden">
+        <button onclick="if(ready) { vollgas.manualStepAndRedraw(); }">step</button>
+        <script>
+            var ready = false;
+            var vollgas = Vollgas.from({
+                "config": [
+                    {
+                        "key": "stepsPerSecond",
+                        "value": 0
+                    }
+                ],
+                "elements": [
+                    {
+                        "name": "n0",
+                        "type": "nor",
+                        "parameters": [],
+                        "base": {
+                            "x": 100,
+                            "y": 100
+                        },
+                        "outsideInputs": [],
+                        "externalOutputs": [],
+                        "wires": [
+                            {
+                                "outputIndex": null,
+                                "more": null,
+                                "coordinates": [
+                                    {
+                                        "x": {
+                                            "delta": 50,
+                                            "from": "prev"
+                                        },
+                                        "y": "prev"
+                                    },
+                                    {
+                                        "x": "prev",
+                                        "y": {
+                                            "delta": 50,
+                                            "from": "prev"
+                                        }
+                                    },
+                                    {
+                                        "x": "next",
+                                        "y": "prev"
+                                    },
+                                    {
+                                        "x": {
+                                            "delta": -50,
+                                            "from": "next"
+                                        },
+                                        "y": "next"
+                                    },
+                                    {
+                                        "name": "n0",
+                                        "connector": "input",
+                                        "index": null
+                                    }
+                                ],
+                                "initialValue": null
+                            }
+                        ]
+                    }
+                ]
+            });
+
+            vollgas.init().then((view) => {
+                ready = true;
+                document.body.appendChild(view);
+            });
+        </script>
+    </body>
+</html>

@@ -8,7 +8,7 @@ export class GraphicalCircuit {
 
     public circuit: Circuit;
 
-    constructor(private graphicalElement: StubGraphicalElement<any>, private disableGraphics = false, private stepsPerSecond = 50, private delayPerWindowHeight = GraphicalWire.DEFAULT_DELAY_PER_WINDOW_HEIGHT, private echoData = false, private cyclesPerStep?: number) {
+    constructor(public graphicalElement: StubGraphicalElement<any>, private disableGraphics = false, private stepsPerSecond = 50, private delayPerWindowHeight = GraphicalWire.DEFAULT_DELAY_PER_WINDOW_HEIGHT, private echoData = false, private cyclesPerStep?: number) {
 
     }
 
@@ -56,38 +56,43 @@ export class GraphicalCircuit {
             });
             this.app.stage.addChild(graphics);
 
+            this.graphicalElement.redraw(0);
 
-            let intervalMsec = 1000 / this.stepsPerSecond;
-            let msec = -1;
+            if(this.stepsPerSecond > 0) {
 
-            let ticker = this.app.ticker.add(() => {
+                let intervalMsec = 1000 / this.stepsPerSecond;
+                let msec = -1;
 
-                if(msec < 0) {
-                    msec = 0;
-                    return;
-                }
+                let ticker = this.app.ticker.add(() => {
 
-                msec += ticker.elapsedMS;
-
-                while(msec >= intervalMsec) {
-
-                    msec -= intervalMsec;
-
-                    if(this.echoData) {
-                        console.log(`data source after step ${this.circuit.dataSource.n}:`);
-                        console.log("addresses", this.circuit.dataSource.addressArray);
-                        console.log("data", this.circuit.dataSource.array);
+                    if(msec < 0) {
+                        msec = 0;
+                        return;
                     }
 
-                    this.circuit.step(this.cyclesPerStep);
-                    
-                }
+                    msec += ticker.elapsedMS;
 
-                let progress = msec / intervalMsec;
+                    while(msec >= intervalMsec) {
 
-                this.graphicalElement.redraw(progress);
+                        msec -= intervalMsec;
 
-            });
+                        if(this.echoData) {
+                            console.log(`data source after step ${this.circuit.dataSource.n}:`);
+                            console.log("addresses", this.circuit.dataSource.addressArray);
+                            console.log("data", this.circuit.dataSource.array);
+                        }
+
+                        this.circuit.step(this.cyclesPerStep);
+
+                    }
+
+                    let progress = msec / intervalMsec;
+
+                    this.graphicalElement.redraw(progress);
+
+                });
+
+            }
 
         }
 

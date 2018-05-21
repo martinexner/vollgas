@@ -80,7 +80,7 @@ export class GrammarParser {
                 default: 0
             },
             stepsPerSecond: {
-                default: 0
+                default: -1
             },
             cyclesPerStep: {
                 default: 0,
@@ -361,7 +361,7 @@ export class GrammarParser {
 
         return {
             height: params.height,
-            stepsPerSecond: params.stepsPerSecond > 0 ? params.stepsPerSecond : undefined,
+            stepsPerSecond: params.stepsPerSecond >= 0 ? params.stepsPerSecond : undefined,
             cyclesPerStep: params.cyclesPerStep > 0 ? params.cyclesPerStep : undefined,
             delayPerWindowHeight: params.delayPerWindowHeight < 0 ? undefined : params.delayPerWindowHeight,
             echoData: params.echoData,

@@ -4,12 +4,12 @@ let fs = require("fs");
 
 module.exports = {
     entry: {
-        main: path.resolve(__dirname, "out/js/demo.js"),
+        main: path.resolve(__dirname, "out/js/Vollgas_global.js"),
     },
     mode: "development",
     output: {
         path: path.resolve(__dirname, "docs/"),
-        filename: "demo.js"
+        filename: "vollgas.js"
     },
     plugins: [
         new webpack.BannerPlugin(fs.readFileSync("./license_header.txt", "utf8"))
