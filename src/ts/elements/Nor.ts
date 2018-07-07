@@ -3,7 +3,9 @@ import { ConnectedElement } from "../ConnectedElement";
 
 export class Nor extends LogicElement {
 
-    constructor(name: string, numInputs: number, initialValue: boolean = false) {
+    private additionalDelayBufferAddress: ConnectedElement.RotatingAddress|undefined = undefined;
+
+    constructor(name: string, numInputs: number, initialValue: boolean = false, private additionalDelay: number = 0) {
         super(name, numInputs, 1, initialValue);
 
         if(numInputs <= 0) {
@@ -29,19 +31,41 @@ export class Nor extends LogicElement {
             hint: `static output address of nor ${this.getName()}`
         });
 
-        return {
-            calculations: [
-                {
-                    target: outputAddress,
-                    value: {
-                        type: "NotRule",
-                        value: {
-                            type: "OrRule",
-                            value: norAddresses
-                        }
-                    }
+        let resultTargetAddress: ConnectedElement.Address = outputAddress;
+
+        let calculations: ConnectedElement.Calculation[] = [];
+
+        if(this.additionalDelay) {
+            this.additionalDelayBufferAddress = new ConnectedElement.RotatingAddress({
+                space: outputSpace,
+                address: 1,
+                mod: this.additionalDelay,
+                startOffset: 0,
+                hint: `additional output delay buffer address for ${this.getName()}`
+            });
+
+            resultTargetAddress = this.additionalDelayBufferAddress;
+
+            // copy the oldest value from the delay buffer to the output address
+            calculations.push({
+                target: outputAddress,
+                value: resultTargetAddress
+            });
+        }
+
+        calculations.push({
+            target: resultTargetAddress,
+            value: {
+                type: "NotRule",
+                value: {
+                    type: "OrRule",
+                    value: norAddresses
                 }
-            ],
+            }
+        });
+
+        return {
+            calculations: calculations,
             outputAddresses: [outputAddress]
         };
 
@@ -49,6 +73,24 @@ export class Nor extends LogicElement {
 
     makeUpdateFunctions() {
         return [];
+    }
+
+    getInitiallyTrueAddresses() {
+
+        let addresses: ConnectedElement.StaticAddress[] = [];
+
+        if(this.initialValue) {
+
+            addresses.push(...this.outputAddresses);
+
+            if(this.additionalDelayBufferAddress) {
+                addresses.push(...this.additionalDelayBufferAddress.getAllAddresses());
+            }
+
+        }
+
+        return addresses;
+
     }
 
 }

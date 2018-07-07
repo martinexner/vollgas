@@ -46,7 +46,7 @@ export class GraphicalNor extends StubGraphicalElement<Nor> {
     }
 
     makeElement(elementHeight: number, coordinates: StubGraphicalElement.Coordinates[]) {
-        let element = new Nor(this.getName(), this.numInputs, this.initialValue);
+        let element = new Nor(this.getName(), this.numInputs, this.initialValue, GraphicalNor.ADDITIONAL_DELAY);
         return element;
     }
 
@@ -78,5 +78,7 @@ export namespace GraphicalNor {
     export const DEFAULT_HEIGHT = GraphicalOr.DEFAULT_HEIGHT;
 
     export const DEFAULT_WIDTH = GraphicalOr.getWidth(DEFAULT_HEIGHT) + Math.floor(GraphicalNor.DEFAULT_HEIGHT/6);
+
+    export let ADDITIONAL_DELAY = 0; // might be overwritten by GraphicalCircuit
 
 }

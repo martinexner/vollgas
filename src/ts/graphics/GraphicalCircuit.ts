@@ -1,6 +1,7 @@
 import { Circuit } from "./../Circuit";
 import { StubGraphicalElement } from "./StubGraphicalElement";
 import { GraphicalWire } from "./GraphicalWire";
+import { GraphicalNor } from "./GraphicalNor";
 
 export class GraphicalCircuit {
 
@@ -8,7 +9,7 @@ export class GraphicalCircuit {
 
     public circuit: Circuit;
 
-    constructor(public graphicalElement: StubGraphicalElement<any>, private disableGraphics = false, private stepsPerSecond = 50, private delayPerWindowHeight = GraphicalWire.DEFAULT_DELAY_PER_WINDOW_HEIGHT, private echoData = false, private cyclesPerStep?: number) {
+    constructor(public graphicalElement: StubGraphicalElement<any>, private disableGraphics = false, private stepsPerSecond = 50, private delayPerWindowHeight = GraphicalWire.DEFAULT_DELAY_PER_WINDOW_HEIGHT, private echoData = false, private cyclesPerStep?: number, private additionalNorDelay?: number) {
 
     }
 
@@ -26,6 +27,10 @@ export class GraphicalCircuit {
         }
 
         GraphicalWire.DELAY_PER_PIXEL = this.delayPerWindowHeight / height;
+
+        if(this.additionalNorDelay !== undefined && this.additionalNorDelay >= 0) {
+            GraphicalNor.ADDITIONAL_DELAY = this.additionalNorDelay;
+        }
 
         let coordinates = [{ x: 0, y: 0 }];
 

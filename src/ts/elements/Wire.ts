@@ -161,17 +161,7 @@ export class Wire implements ConnectedElement {
         if(this.delay && this.initialValue) {
 
             for(let i = 0; i < this.delayBufferAddresses.length; i++) {
-
-                let rotatingAddress = this.delayBufferAddresses[i];
-
-                for(let j = 0; j < rotatingAddress.info.mod; j++) {
-                    addresses.push(new ConnectedElement.StaticAddress({
-                        space: rotatingAddress.info.space,
-                        address: rotatingAddress.info.address + j,
-                        hint: `static wire delay buffer address for channel ${i} of ${this.getName()}`
-                    }));
-                }
-
+                addresses.push(...this.delayBufferAddresses[i].getAllAddresses());
             }
 
             addresses.push(...this.outputAddresses);

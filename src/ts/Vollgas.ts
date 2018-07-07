@@ -26,7 +26,7 @@ export default class Vollgas {
 
         let element = new CombinedGraphicalElement("root_element", this.parseResult.height, this.parseResult.wiringDescriptions);
 
-        this.graphicalCircuit = new GraphicalCircuit(element, this.parseResult.disableGraphics, this.parseResult.stepsPerSecond, this.parseResult.delayPerWindowHeight, this.parseResult.echoData, this.parseResult.cyclesPerStep);
+        this.graphicalCircuit = new GraphicalCircuit(element, this.parseResult.disableGraphics, this.parseResult.stepsPerSecond, this.parseResult.delayPerWindowHeight, this.parseResult.echoData, this.parseResult.cyclesPerStep, this.parseResult.additionalNorDelay);
 
         await this.graphicalCircuit.init(this.parseResult.echoFunctions);
 
