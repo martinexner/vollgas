@@ -10,12 +10,12 @@ export abstract class LogicElement implements ConnectedElement {
     
     private inputValueAddressProviders: (ConnectedElement.OutputValueAddressProvider|undefined)[];
 
-    private outputAddresses: ConnectedElement.StaticAddress[];
+    protected outputAddresses: ConnectedElement.StaticAddress[];
     private generatedInputAddresses: ConnectedElement.StaticAddress[];
 
     private inputSpace: ConnectedElement.Space;
 
-    constructor(private name: string, protected readonly numInputs: number, protected readonly numOutputs: number, private initialValue: boolean = false) {
+    constructor(private name: string, protected readonly numInputs: number, protected readonly numOutputs: number, protected readonly initialValue: boolean = false) {
 
         this.inputValueAddressProviders = new Array(numInputs);
         this.generatedInputAddresses = new Array(numInputs);

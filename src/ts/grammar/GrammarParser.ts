@@ -88,6 +88,9 @@ export class GrammarParser {
             delayPerWindowHeight: {
                 default: -1
             },
+            additionalNorDelay: {
+                default: -1
+            },
             echoData: {
                 default: false
             },
@@ -364,6 +367,7 @@ export class GrammarParser {
             stepsPerSecond: params.stepsPerSecond >= 0 ? params.stepsPerSecond : undefined,
             cyclesPerStep: params.cyclesPerStep > 0 ? params.cyclesPerStep : undefined,
             delayPerWindowHeight: params.delayPerWindowHeight < 0 ? undefined : params.delayPerWindowHeight,
+            additionalNorDelay: params.additionalNorDelay < 0 ? undefined : params.additionalNorDelay,
             echoData: params.echoData,
             echoFunctions: params.echoFunctions,
             disableGraphics: params.disableGraphics,
@@ -846,6 +850,7 @@ export namespace GrammarParser {
         stepsPerSecond: number|undefined;
         cyclesPerStep: number|undefined;
         delayPerWindowHeight: number|undefined;
+        additionalNorDelay: number|undefined;
         echoData: boolean;
         echoFunctions: boolean;
         disableGraphics: boolean;

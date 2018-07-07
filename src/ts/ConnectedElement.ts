@@ -110,8 +110,18 @@ export namespace ConnectedElement {
             info.space.onAddress(this);
         }
 
-        private dummy() {
+        getAllAddresses(): StaticAddress[] {
+            let addresses = [];
 
+            for(let i = 0; i < this.info.mod; i++) {
+                addresses.push(new StaticAddress({
+                    space: this.info.space,
+                    address: this.info.address + i,
+                    hint: `static buffer row address of rotating address ${this.info.address} with offset ${i} mod ${this.info.mod}`
+                }));
+            }
+
+            return addresses;
         }
 
     }
