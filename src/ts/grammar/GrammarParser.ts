@@ -12,6 +12,7 @@ import { GraphicalDecoder } from "../graphics/GraphicalDecoder";
 import { GraphicalDFlipFlop } from "../graphics/GraphicalDFlipFlop";
 import { GraphicalRegister } from "../graphics/GraphicalRegister";
 import { GraphicalRSFlipFlop } from "../graphics/GraphicalRSFlipFlop";
+import { GraphicalJKFlipFlop } from "../graphics/GraphicalJKFlipFlop";
 import { GraphicalMultiplexer } from "../graphics/GraphicalMultiplexer";
 import { GraphicalHalfAdder } from "../graphics/GraphicalHalfAdder";
 import { GraphicalFullAdder } from "../graphics/GraphicalFullAdder";
@@ -199,7 +200,7 @@ export class GrammarParser {
                     if(element.outputs[outputIndex]) {
                         throw new Error(element.element.name + ": cannot use output index " + outputIndex + " for external output twice");
                     }
-    
+
                     element.outputs[outputIndex] = true;
 
                 }
@@ -597,6 +598,10 @@ export class GrammarParser {
                 let params = GrammarParser.parseParameters(element.name, type, element.parameters, GrammarParser.PARAMS_DETAILED_INIT);
                 return new GraphicalDFlipFlop(element.name, params.detailed, params.init);
             }
+            case "jkff": {
+                let params = GrammarParser.parseParameters(element.name, type, element.parameters, GrammarParser.PARAMS_DETAILED_INIT);
+                return new GraphicalJKFlipFlop(element.name, params.detailed, params.init);
+            }
             case "reg": {
                 let params = GrammarParser.parseParameters(element.name, type, element.parameters, {
                     ...GrammarParser.PARAMS_DETAILED_OVERRIDEHEIGHT,
@@ -787,7 +792,7 @@ export namespace GrammarParser {
 
     //
 
-    export type ElementType = "nor"|"or"|"and"|"xor"|"source"|"sink"|"split"|"decoder"|"rsff"|"dff"|"reg"|"mux"|"ha"|"fa"|"micro16"|"micro16regs"|"micro16alu"|"micro16mic"|"micro16store"|"micro16clock"|"manynors";
+    export type ElementType = "nor"|"or"|"and"|"xor"|"source"|"sink"|"split"|"decoder"|"rsff"|"dff"|"jkff"|"reg"|"mux"|"ha"|"fa"|"micro16"|"micro16regs"|"micro16alu"|"micro16mic"|"micro16store"|"micro16clock"|"manynors";
 
     export type ElementBase = CombinedGraphicalElement.BasedCoordinatesDescription|CombinedGraphicalElement.CoordinatesValueDescription;
 
