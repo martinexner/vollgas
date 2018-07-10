@@ -709,13 +709,14 @@ export class GrammarParser {
             }
             case "manynors": {
                 let params = GrammarParser.parseParameters(element.name, type, element.parameters, {
+                    ...GrammarParser.PARAMS_DETAILED_INIT,
                     n: {
                         default: 1,
                         check: (n) => n > 0,
                         required: true
                     }
                 });
-                return new GraphicalManyNors(element.name, params.n);
+                return new GraphicalManyNors(element.name, params.n, params.detailed, params.init);
             }
         }
 
