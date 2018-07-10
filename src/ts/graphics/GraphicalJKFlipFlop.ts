@@ -35,7 +35,7 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
             name: "CLK_SPLIT",
             element: new GraphicalSplit("CLK_SPLIT0", 2, 1),
             height: "auto",
-            inputs: [{ name: "outside", outputIndex: 0 }],
+            inputs: [{ name: "outside", outputIndex: 1 }],
             externalOutputs: [],
             coordinates: [{
               x: GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
@@ -97,7 +97,7 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
             height: "auto",
             inputs: [
               { name: "Q_to_K_AND", outputIndex: 0},
-              { name: "outside", outputIndex: 1},
+              { name: "outside", outputIndex: 2},
               { name: "CLK_OUT_to_K_AND", outputIndex: 0},
             ],
             externalOutputs: [],
@@ -112,7 +112,7 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
             height: "auto",
             inputs: [
               { name: "CLK_OUT_to_J_AND", outputIndex: 0},
-              { name: "outside", outputIndex: 2},
+              { name: "outside", outputIndex: 0},
               { name: "Qn_to_J_AND", outputIndex: 0},
             ],
             externalOutputs: [],
@@ -129,7 +129,7 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
               { name: "K_AND_to_RSFF", outputIndex: 0},
               { name: "J_AND_to_RSFF", outputIndex: 0},
             ],
-            externalOutputs: [1],
+            externalOutputs: [0,1],
             coordinates: [{
               x: 10*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
               y: 2*GraphicalOr.DEFAULT_HEIGHT,
@@ -210,8 +210,6 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
               { x: {delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE, from: "prev" }, y: "prev"},
               { x: "prev", y: {delta: -0.5*GraphicalOr.DEFAULT_HEIGHT, from: "prev" } },
               { x: {delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE, from: "prev" }, y: "prev" },
-              { x: "prev", y: {delta: -0.5*GraphicalOr.DEFAULT_HEIGHT, from: "prev" } },
-              { x: {delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "next" }, y: "next"},
               { name: "CLK_AND", connector: "input", index: 1 }
             ]
           },

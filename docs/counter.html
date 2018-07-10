@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>vollgas demo</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.7.1/pixi.min.js"></script>
+        <script src="vollgas.js"></script>
+    </head>
+    <body style="margin: 0; padding: 0; overflow: hidden">
+        <script>
+            Vollgas.from({
+                "config": [],
+                "elements": [
+                    {
+                      "name": "Count",
+                      "type": "source",
+                      "parameters": [],
+                      "base": { "x": 50, "y": 236, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [{
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "name": "FF1InputSplit", "connector": "input", "index": 0 }
+                        ],
+                        "initialValue": null,
+                      }],
+                    },
+                    {
+                      "name": "ConstTrue1",
+                      "type": "split",
+                      "parameters": [{"key":"init","value":"true"}],
+                      "base": { "x": 120, "y": 218, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [{
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "name": "FF1", "connector": "input", "index": 0 }
+                        ],
+                        "initialValue": null,
+                      }],
+                    },
+                    {
+                      "name": "ConstTrue2",
+                      "type": "split",
+                      "parameters": [{"key":"init","value":"true"}],
+                      "base": { "x": 120, "y": 254, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [{
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "name": "FF1", "connector": "input", "index": 2 }
+                        ],
+                        "initialValue": null,
+                      }],
+                    },
+                    {
+                      "name": "FF1InputSplit",
+                      "type": "split",
+                      "parameters": [],
+                      "base": { "x": 100, "y": 236, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [{
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "name": "FF1", "connector": "input", "index": 1 }
+                        ],
+                        "initialValue": null,
+                      },{
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "x": "prev", "y": "next" },
+                            { "name": "CLK1InputSplit", "connector": "input", "index": 0 }
+                        ],
+                        "initialValue": null,
+                      }],
+                    },
+                    {
+                      "name": "FF1",
+                      "type": "jkff",
+                      "parameters": [],
+                      "base": { "x": 150, "y": 200, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [{
+                        "outputIndex": 0,
+                        "more": null,
+                        "coordinates": [
+                            { "name": "FF1OutputSplit", "connector": "input", "index": 0 }
+                        ],
+                        "initialValue": null,
+                      }],
+                    },
+                    {
+                      "name": "FF1OutputSplit",
+                      "type": "split",
+                      "parameters": [],
+                      "base": { "x": 210, "y": 224, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [{
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "name": "Q0", "connector": "input", "index": 0 }
+                        ],
+                        "initialValue": null,
+                      },
+                      {
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "name": "FF2InputSplit", "connector": "input", "index": 0 }
+                        ],
+                        "initialValue": null,
+                      }],
+                    },
+                    {
+                      "name": "Q0",
+                      "type": "sink",
+                      "parameters": [],
+                      "base": { "x": 210, "y": 150, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [],
+                    },
+                    {
+                      "name": "FF2InputSplit",
+                      "type": "split",
+                      "parameters": [],
+                      "base": { "x": 220, "y": 224, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [{
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "x": "prev", "y": "next" },
+                            { "name": "FF2", "connector": "input", "index": 0 }
+                        ],
+                        "initialValue": null,
+                      },
+                      {
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "x": "prev", "y": "next" },
+                            { "name": "FF2", "connector": "input", "index": 2 }
+                        ],
+                        "initialValue": null,
+                      }],
+                    },
+                    {
+                      "name": "CLK1InputSplit",
+                      "type": "split",
+                      "parameters": [],
+                      "base": { "x": 225, "y": 300, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [{
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "x": "prev", "y": "next" },
+                            { "name": "FF2", "connector": "input", "index": 1 }
+                        ],
+                        "initialValue": null,
+                      }],
+                    },
+                    {
+                      "name": "FF2",
+                      "type": "jkff",
+                      "parameters": [],
+                      "base": { "x": 235, "y": 200, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [{
+                        "outputIndex": 0,
+                        "more": null,
+                        "coordinates": [
+                            { "x": "next", "y": "prev" },
+                            { "name": "FF2OutputSplit", "connector": "input", "index": 0 }
+                        ],
+                        "initialValue": null,
+                      }],
+                    },
+                    {
+                      "name": "FF2OutputSplit",
+                      "type": "split",
+                      "parameters": [],
+                      "base": { "x": 295, "y": 180, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [{
+                        "outputIndex": null,
+                        "more": null,
+                        "coordinates": [
+                            { "name": "Q1", "connector": "input", "index": 0 }
+                        ],
+                        "initialValue": null,
+                      }],
+                    },
+                    {
+                      "name": "Q1",
+                      "type": "sink",
+                      "parameters": [],
+                      "base": { "x": 295, "y": 150, },
+                      "outsideInputs": [],
+                      "externalOutputs": [],
+                      "wires": [],
+                    },
+                ]
+            }).init().then((view) => {
+                document.body.appendChild(view);
+            });
+        </script>
+    </body>
+</html>
