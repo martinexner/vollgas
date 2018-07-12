@@ -2,6 +2,7 @@ import { CompactCombinedGraphicalElement } from "./CompactCombinedGraphicalEleme
 import { StubGraphicalElement } from "./StubGraphicalElement";
 import { CombinedGraphicalElement } from "./CombinedGraphicalElement";
 import { GraphicalNor } from "./GraphicalNor";
+import { GraphicalManyNors } from "./GraphicalManyNors";
 import { GraphicalOr } from "./GraphicalOr";
 import { GraphicalWire } from "./GraphicalWire";
 import { GraphicalRSFlipFlop } from "./GraphicalRSFlipFlop";
@@ -44,7 +45,7 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
           },
           {
             name: "CLK_NOT",
-            element: new GraphicalNor("CLK_NOT0", 1, initialValue),
+            element: new GraphicalManyNors("CLK_NOT0", 25, initialValue),
             height: "auto",
             inputs: [{ name: "CLK_SPLIT_to_CLK_NOT", outputIndex: 0}],
             externalOutputs: [],
@@ -54,7 +55,7 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
                   from: { name: "CLK_SPLIT", connector: "output", index: 0
                   },
               },
-              y: 7*GraphicalOr.DEFAULT_HEIGHT,
+              y: 4*GraphicalOr.DEFAULT_HEIGHT,
             }],
           },
           {
@@ -187,7 +188,7 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
               { name: "CLK_AND", connector: "input", index: 0 }
             ]
           },
-          {
+          /*{
             name: "CLK_NOT_to_CLK_AND",
             element: new GraphicalWire("CLK_NOT_to_CLK_AND0", initialValue),
             height: "auto",
@@ -210,6 +211,19 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
               { x: {delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE, from: "prev" }, y: "prev"},
               { x: "prev", y: {delta: -0.5*GraphicalOr.DEFAULT_HEIGHT, from: "prev" } },
               { x: {delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE, from: "prev" }, y: "prev" },
+              { name: "CLK_AND", connector: "input", index: 1 }
+            ]
+          },*/
+          {
+            name: "CLK_NOT_to_CLK_AND",
+            element: new GraphicalWire("CLK_NOT_to_CLK_AND0", initialValue),
+            height: "auto",
+            inputs: [{ name: "CLK_NOT", outputIndex: 0 }],
+            externalOutputs: [],
+            coordinates: [
+              { name: "CLK_NOT", connector: "output", index: 0 },
+              { x: {delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "prev" }, y: "prev"},
+              { x: "prev", y: "next"},
               { name: "CLK_AND", connector: "input", index: 1 }
             ]
           },
