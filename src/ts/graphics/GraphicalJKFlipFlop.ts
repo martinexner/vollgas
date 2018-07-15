@@ -9,11 +9,10 @@ import { GraphicalRSFlipFlop } from "./GraphicalRSFlipFlop";
 import { GraphicalAnd } from "./GraphicalAnd";
 import { GraphicalSplit } from "./GraphicalSplit";
 import { GraphicalSinkTerminal } from "./GraphicalSinkTerminal";
-import { GrammarParser } from "../grammar/GrammarParser";
 import { DataSource } from "../DataSource";
 
 // example call:
-// file:///home/sseifried/Source/vollgas/docs/demo.html#autoSource=true**x*jkff*detailed=true*@100:100*%3C0+2
+// demo.html#autoSource=true**x*jkff*detailed=true*@100:100*%3C0+2
 export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
 
     private width: number;
@@ -29,299 +28,300 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
         super(name, 7*GraphicalNor.DEFAULT_HEIGHT, detailed);
 
         this.wiringDescriptions = [
-          //
-          // circuit elements
-          //
-          {
-            name: "CLK_SPLIT",
-            element: new GraphicalSplit("CLK_SPLIT0", 2, 1),
-            height: "auto",
-            inputs: [{ name: "outside", outputIndex: 1 }],
-            externalOutputs: [],
-            coordinates: [{
-              x: GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
-              y: 3*GraphicalOr.DEFAULT_HEIGHT,
-              }]
-          },
-          {
-            name: "CLK_NOT",
-            element: new GraphicalManyNors("CLK_NOT0", 3, initialValue),
-            height: "auto",
-            inputs: [{ name: "CLK_SPLIT_to_CLK_NOT", outputIndex: 0}],
-            externalOutputs: [],
-            coordinates: [{
-              x: {
-                  delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
-                  from: { name: "CLK_SPLIT", connector: "output", index: 0
-                  },
-              },
-              y: 4.5*GraphicalOr.DEFAULT_HEIGHT,
-            }],
-          },
-          {
-            name: "CLK_AND",
-            element: new GraphicalAnd("CLK_AND0", 2, initialValue),
-            height: "auto",
-            inputs: [
-              { name: "CLK_SPLIT_to_CLK_AND", outputIndex: 0},
-              { name: "CLK_NOT_to_CLK_AND", outputIndex: 0},
-            ],
-            externalOutputs: [],
-            coordinates: [{
-              x: {
-                  delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
-                  from: { name: "CLK_NOT", connector: "output", index: 0 },
-              },
-              y: {
-                  delta: -(GraphicalOr.DEFAULT_HEIGHT/3),
-                  from: { name: "CLK_SPLIT", connector: "output", index: 0 },
-              },
-            }]
-          },
-          {
-            name: "CLK_OUT",
-            element: new GraphicalSplit("CLK_SPLIT1", 2, 1),
-            height: "auto",
-            inputs: [{ name: "CLK_AND_to_CLK_OUT", outputIndex: 0 }],
-            externalOutputs: [],
-            coordinates: [{
-              x: {
-                  delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
-                  from: { name: "CLK_AND", connector: "output", index: 0 },
-              },
-              y: { name: "CLK_AND", connector: "output", index: 0 },
-            }],
-          },
-          {
-            name: "K_AND",
-            element: new GraphicalAnd("K_AND0", 3, initialValue),
-            height: "auto",
-            inputs: [
-              { name: "Q_to_K_AND", outputIndex: 0},
-              { name: "outside", outputIndex: 2},
-              { name: "CLK_OUT_to_K_AND", outputIndex: 0},
-            ],
-            externalOutputs: [],
-            coordinates: [{
-              x: 8*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
-              y: GraphicalOr.DEFAULT_HEIGHT,
-            }]
-          },
-          {
-            name: "J_AND",
-            element: new GraphicalAnd("J_AND0", 3, initialValue),
-            height: "auto",
-            inputs: [
-              { name: "CLK_OUT_to_J_AND", outputIndex: 0},
-              { name: "outside", outputIndex: 0},
-              { name: "Qn_to_J_AND", outputIndex: 0},
-            ],
-            externalOutputs: [],
-            coordinates: [{
-              x: 8*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
-              y: 5*GraphicalOr.DEFAULT_HEIGHT,
-            }]
-          },
-          {
-            name: "RSFLIPFLOP",
-            element: new GraphicalRSFlipFlop("RSFLIPFLOP0", initialValue),
-            height: "auto",
-            inputs: [
-              { name: "K_AND_to_RSFF", outputIndex: 0},
-              { name: "J_AND_to_RSFF", outputIndex: 0},
-            ],
-            externalOutputs: [0,1],
-            coordinates: [{
-              x: 10*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
-              y: 2*GraphicalOr.DEFAULT_HEIGHT,
-            }]
-          },
-          {
-            name: "Q_SINK",
-            element: new GraphicalSinkTerminal("Q_SINK0"),
-            height: "auto",
-            inputs: [
-              { name: "RSFF_to_Q_SINK", outputIndex: 0},
-            ],
-            externalOutputs: [],
-            coordinates: [{
-              x: 16*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
-              y: 2.5*GraphicalOr.DEFAULT_HEIGHT,
-            }]
-          },
-          {
-            name: "Qn_SINK",
-            element: new GraphicalSinkTerminal("Qn_SINK0"),
-            height: "auto",
-            inputs: [
-              { name: "RSFF_to_Qn_SINK", outputIndex: 0},
-            ],
-            externalOutputs: [],
-            coordinates: [{
-              x: 16*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
-              y: 4.5*GraphicalOr.DEFAULT_HEIGHT,
-            }]
-          },
-          //
-          // wiring
-          //
-          {
-            name: "CLK_SPLIT_to_CLK_NOT",
-            element: new GraphicalWire("CLK_SPLIT_to_CLK_NOT0", initialValue),
-            height: "auto",
-            inputs: [{ name: "CLK_SPLIT", outputIndex: 0 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "CLK_SPLIT", connector: "output", index: 0 },
-              { x: "prev", y: "next" },
-              { name: "CLK_NOT", connector: "input", index: 0 }
-            ]
-          },
-          {
-            name: "CLK_SPLIT_to_CLK_AND",
-            element: new GraphicalWire("CLK_SPLIT_to_CLK_AND0", initialValue),
-            height: "auto",
-            inputs: [{ name: "CLK_SPLIT", outputIndex: 1 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "CLK_SPLIT", connector: "output", index: 0 },
-              { name: "CLK_AND", connector: "input", index: 0 }
-            ]
-          },
-          {
-            name: "CLK_NOT_to_CLK_AND",
-            element: new GraphicalWire("CLK_NOT_to_CLK_AND0", initialValue),
-            height: "auto",
-            inputs: [{ name: "CLK_NOT", outputIndex: 0 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "CLK_NOT", connector: "output", index: 0 },
-              { x: {delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "prev" }, y: "prev"},
-              { x: "prev", y: {delta: -(GraphicalNor.DEFAULT_HEIGHT/2 + GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2), from: "prev"} },
-              { x: {delta: -(GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2 + GraphicalNor.DEFAULT_WIDTH), from: "prev"}, y: "prev" },
-              { x: "prev", y: {delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/4, from: "prev"} },
-              { x: {delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2 + GraphicalNor.DEFAULT_WIDTH, from: "prev"}, y: "prev" },
-              { x: "prev", y: {delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/4, from: "prev"} },
-              { x: {delta: -(GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2 + GraphicalNor.DEFAULT_WIDTH), from: "prev"}, y: "prev" },
-              { x: "prev", y: {delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/4, from: "prev"} },
-              { x: {delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2 + GraphicalNor.DEFAULT_WIDTH, from: "prev"}, y: "prev" },
-              { x: "prev", y: {delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/4, from: "prev"} },
-              { x: {delta: -(GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2 + GraphicalNor.DEFAULT_WIDTH), from: "prev"}, y: "prev" },
-              { x: "prev", y: "next"},
-              { name: "CLK_AND", connector: "input", index: 1 }
-            ]
-          },
-          {
-            name: "CLK_AND_to_CLK_OUT",
-            element: new GraphicalWire("CLK_AND_to_CLK_OUT0", initialValue),
-            height: "auto",
-            inputs: [{ name: "CLK_AND", outputIndex: 0 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "CLK_AND", connector: "output", index: 0 },
-              { name: "CLK_OUT", connector: "input", index: 0 },
-            ]
-          },
-          {
-            name: "CLK_OUT_to_K_AND",
-            element: new GraphicalWire("CLK_OUT_to_K_AND0", initialValue),
-            height: "auto",
-            inputs: [{ name: "CLK_OUT", outputIndex: 0 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "CLK_OUT", connector: "output", index: 0 },
-              { x: "prev", y: "next" },
-              { name: "K_AND", connector: "input", index: 2 },
-            ]
-          },
-          {
-            name: "CLK_OUT_to_J_AND",
-            element: new GraphicalWire("CLK_OUT_to_J_AND0", initialValue),
-            height: "auto",
-            inputs: [{ name: "CLK_OUT", outputIndex: 1 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "CLK_OUT", connector: "output", index: 0 },
-              { x: "prev", y: "next" },
-              { name: "J_AND", connector: "input", index: 0 },
-            ]
-          },
-          {
-            name: "K_AND_to_RSFF",
-            element: new GraphicalWire("K_AND_to_RSFF0", initialValue),
-            height: "auto",
-            inputs: [{ name: "K_AND", outputIndex: 0 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "K_AND", connector: "output", index: 0 },
-              { x: {delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "prev" }, y: "prev"},
-              { x: {delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "next" }, y: "next"},
-              { name: "RSFLIPFLOP", connector: "input", index: 0 },
-            ]
-          },
-          {
-            name: "J_AND_to_RSFF",
-            element: new GraphicalWire("J_AND_to_RSFF0", initialValue),
-            height: "auto",
-            inputs: [{ name: "J_AND", outputIndex: 0 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "J_AND", connector: "output", index: 0 },
-              { x: {delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "prev" }, y: "prev"},
-              { x: {delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "next" }, y: "next"},
-              { name: "RSFLIPFLOP", connector: "input", index: 1 },
-            ]
-          },
-          {
-            name: "Q_to_K_AND",
-            element: new GraphicalWire("Q_to_K_AND0", initialValue),
-            height: "auto",
-            inputs: [{ name: "RSFLIPFLOP", outputIndex: 0 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "RSFLIPFLOP", connector: "output", index: 0 },
-              { x: "prev", y: GraphicalOr.DEFAULT_HEIGHT/2 },
-              { x: 7*GraphicalWire.DEFAULT_ELEMENT_DISTANCE, y: GraphicalOr.DEFAULT_HEIGHT/2 },
-              { x: 7*GraphicalWire.DEFAULT_ELEMENT_DISTANCE, y: "next" },
-              { name: "K_AND", connector: "input", index: 0 },
-            ]
-          },
-          {
-            name: "Qn_to_J_AND",
-            element: new GraphicalWire("Qn_to_J_AND0", initialValue),
-            height: "auto",
-            inputs: [{ name: "RSFLIPFLOP", outputIndex: 1 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "RSFLIPFLOP", connector: "output", index: 1 },
-              { x: "prev", y: 6.5*GraphicalOr.DEFAULT_HEIGHT },
-              { x: 7*GraphicalWire.DEFAULT_ELEMENT_DISTANCE, y: 6.5*GraphicalOr.DEFAULT_HEIGHT },
-              { x: 7*GraphicalWire.DEFAULT_ELEMENT_DISTANCE, y: "next" },
-              { name: "J_AND", connector: "input", index: 2 },
-            ]
-          },
-          {
-            name: "RSFF_to_Q_SINK",
-            element: new GraphicalWire("RSFF_to_Q_SINK0", initialValue),
-            height: "auto",
-            inputs: [{ name: "RSFLIPFLOP", outputIndex: 0 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "RSFLIPFLOP", connector: "output", index: 0 },
-              { name: "Q_SINK", connector: "input", index: 0 },
-            ]
-          },
-          {
-            name: "RSFF_to_Qn_SINK",
-            element: new GraphicalWire("RSFF_to_Qn_SINK0", initialValue),
-            height: "auto",
-            inputs: [{ name: "RSFLIPFLOP", outputIndex: 1 }],
-            externalOutputs: [],
-            coordinates: [
-              { name: "RSFLIPFLOP", connector: "output", index: 1 },
-              { name: "Qn_SINK", connector: "input", index: 0 },
-            ]
-          },
+            //
+            // circuit elements
+            //
+            {
+                name: "CLK_SPLIT",
+                element: new GraphicalSplit("CLK_SPLIT0", 2, 1),
+                height: "auto",
+                inputs: [{ name: "outside", outputIndex: 1 }],
+                externalOutputs: [],
+                coordinates: [{
+                    x: GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
+                    y: 3*GraphicalOr.DEFAULT_HEIGHT,
+                }]
+            },
+            {
+                name: "CLK_NOT",
+                element: new GraphicalManyNors("CLK_NOT0", 3, initialValue),
+                height: "auto",
+                inputs: [{ name: "CLK_SPLIT_to_CLK_NOT", outputIndex: 0 }],
+                externalOutputs: [],
+                coordinates: [{
+                    x: {
+                        delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
+                        from: {
+                            name: "CLK_SPLIT", connector: "output", index: 0
+                        },
+                    },
+                    y: 4.5*GraphicalOr.DEFAULT_HEIGHT,
+                }],
+            },
+            {
+                name: "CLK_AND",
+                element: new GraphicalAnd("CLK_AND0", 2, initialValue),
+                height: "auto",
+                inputs: [
+                    { name: "CLK_SPLIT_to_CLK_AND", outputIndex: 0 },
+                    { name: "CLK_NOT_to_CLK_AND", outputIndex: 0 },
+                ],
+                externalOutputs: [],
+                coordinates: [{
+                    x: {
+                        delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
+                        from: { name: "CLK_NOT", connector: "output", index: 0 },
+                    },
+                    y: {
+                        delta: -(GraphicalOr.DEFAULT_HEIGHT/3),
+                        from: { name: "CLK_SPLIT", connector: "output", index: 0 },
+                    },
+                }]
+            },
+            {
+                name: "CLK_OUT",
+                element: new GraphicalSplit("CLK_SPLIT1", 2, 1),
+                height: "auto",
+                inputs: [{ name: "CLK_AND_to_CLK_OUT", outputIndex: 0 }],
+                externalOutputs: [],
+                coordinates: [{
+                    x: {
+                        delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
+                        from: { name: "CLK_AND", connector: "output", index: 0 },
+                    },
+                    y: { name: "CLK_AND", connector: "output", index: 0 },
+                }],
+            },
+            {
+                name: "K_AND",
+                element: new GraphicalAnd("K_AND0", 3, initialValue),
+                height: "auto",
+                inputs: [
+                    { name: "Q_to_K_AND", outputIndex: 0 },
+                    { name: "outside", outputIndex: 2 },
+                    { name: "CLK_OUT_to_K_AND", outputIndex: 0 },
+                ],
+                externalOutputs: [],
+                coordinates: [{
+                    x: 8*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
+                    y: GraphicalOr.DEFAULT_HEIGHT,
+                }]
+            },
+            {
+                name: "J_AND",
+                element: new GraphicalAnd("J_AND0", 3, initialValue),
+                height: "auto",
+                inputs: [
+                    { name: "CLK_OUT_to_J_AND", outputIndex: 0 },
+                    { name: "outside", outputIndex: 0 },
+                    { name: "Qn_to_J_AND", outputIndex: 0 },
+                ],
+                externalOutputs: [],
+                coordinates: [{
+                    x: 8*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
+                    y: 5*GraphicalOr.DEFAULT_HEIGHT,
+                }]
+            },
+            {
+                name: "RSFLIPFLOP",
+                element: new GraphicalRSFlipFlop("RSFLIPFLOP0", initialValue),
+                height: "auto",
+                inputs: [
+                    { name: "K_AND_to_RSFF", outputIndex: 0 },
+                    { name: "J_AND_to_RSFF", outputIndex: 0 },
+                ],
+                externalOutputs: [0, 1],
+                coordinates: [{
+                    x: 10*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
+                    y: 2*GraphicalOr.DEFAULT_HEIGHT,
+                }]
+            },
+            {
+                name: "Q_SINK",
+                element: new GraphicalSinkTerminal("Q_SINK0"),
+                height: "auto",
+                inputs: [
+                    { name: "RSFF_to_Q_SINK", outputIndex: 0 },
+                ],
+                externalOutputs: [],
+                coordinates: [{
+                    x: 16*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
+                    y: 2.5*GraphicalOr.DEFAULT_HEIGHT,
+                }]
+            },
+            {
+                name: "Qn_SINK",
+                element: new GraphicalSinkTerminal("Qn_SINK0"),
+                height: "auto",
+                inputs: [
+                    { name: "RSFF_to_Qn_SINK", outputIndex: 0 },
+                ],
+                externalOutputs: [],
+                coordinates: [{
+                    x: 16*GraphicalWire.DEFAULT_ELEMENT_DISTANCE,
+                    y: 4.5*GraphicalOr.DEFAULT_HEIGHT,
+                }]
+            },
+            //
+            // wiring
+            //
+            {
+                name: "CLK_SPLIT_to_CLK_NOT",
+                element: new GraphicalWire("CLK_SPLIT_to_CLK_NOT0", initialValue),
+                height: "auto",
+                inputs: [{ name: "CLK_SPLIT", outputIndex: 0 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "CLK_SPLIT", connector: "output", index: 0 },
+                    { x: "prev", y: "next" },
+                    { name: "CLK_NOT", connector: "input", index: 0 }
+                ]
+            },
+            {
+                name: "CLK_SPLIT_to_CLK_AND",
+                element: new GraphicalWire("CLK_SPLIT_to_CLK_AND0", initialValue),
+                height: "auto",
+                inputs: [{ name: "CLK_SPLIT", outputIndex: 1 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "CLK_SPLIT", connector: "output", index: 0 },
+                    { name: "CLK_AND", connector: "input", index: 0 }
+                ]
+            },
+            {
+                name: "CLK_NOT_to_CLK_AND",
+                element: new GraphicalWire("CLK_NOT_to_CLK_AND0", initialValue),
+                height: "auto",
+                inputs: [{ name: "CLK_NOT", outputIndex: 0 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "CLK_NOT", connector: "output", index: 0 },
+                    { x: { delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "prev" }, y: "prev" },
+                    { x: "prev", y: { delta: -(GraphicalNor.DEFAULT_HEIGHT/2 + GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2), from: "prev" } },
+                    { x: { delta: -(GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2 + GraphicalNor.DEFAULT_WIDTH), from: "prev" }, y: "prev" },
+                    { x: "prev", y: { delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/4, from: "prev" } },
+                    { x: { delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2 + GraphicalNor.DEFAULT_WIDTH, from: "prev" }, y: "prev" },
+                    { x: "prev", y: { delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/4, from: "prev" } },
+                    { x: { delta: -(GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2 + GraphicalNor.DEFAULT_WIDTH), from: "prev" }, y: "prev" },
+                    { x: "prev", y: { delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/4, from: "prev" } },
+                    { x: { delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2 + GraphicalNor.DEFAULT_WIDTH, from: "prev" }, y: "prev" },
+                    { x: "prev", y: { delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/4, from: "prev" } },
+                    { x: { delta: -(GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2 + GraphicalNor.DEFAULT_WIDTH), from: "prev" }, y: "prev" },
+                    { x: "prev", y: "next" },
+                    { name: "CLK_AND", connector: "input", index: 1 }
+                ]
+            },
+            {
+                name: "CLK_AND_to_CLK_OUT",
+                element: new GraphicalWire("CLK_AND_to_CLK_OUT0", initialValue),
+                height: "auto",
+                inputs: [{ name: "CLK_AND", outputIndex: 0 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "CLK_AND", connector: "output", index: 0 },
+                    { name: "CLK_OUT", connector: "input", index: 0 },
+                ]
+            },
+            {
+                name: "CLK_OUT_to_K_AND",
+                element: new GraphicalWire("CLK_OUT_to_K_AND0", initialValue),
+                height: "auto",
+                inputs: [{ name: "CLK_OUT", outputIndex: 0 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "CLK_OUT", connector: "output", index: 0 },
+                    { x: "prev", y: "next" },
+                    { name: "K_AND", connector: "input", index: 2 },
+                ]
+            },
+            {
+                name: "CLK_OUT_to_J_AND",
+                element: new GraphicalWire("CLK_OUT_to_J_AND0", initialValue),
+                height: "auto",
+                inputs: [{ name: "CLK_OUT", outputIndex: 1 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "CLK_OUT", connector: "output", index: 0 },
+                    { x: "prev", y: "next" },
+                    { name: "J_AND", connector: "input", index: 0 },
+                ]
+            },
+            {
+                name: "K_AND_to_RSFF",
+                element: new GraphicalWire("K_AND_to_RSFF0", initialValue),
+                height: "auto",
+                inputs: [{ name: "K_AND", outputIndex: 0 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "K_AND", connector: "output", index: 0 },
+                    { x: { delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "prev" }, y: "prev" },
+                    { x: { delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "next" }, y: "next" },
+                    { name: "RSFLIPFLOP", connector: "input", index: 0 },
+                ]
+            },
+            {
+                name: "J_AND_to_RSFF",
+                element: new GraphicalWire("J_AND_to_RSFF0", initialValue),
+                height: "auto",
+                inputs: [{ name: "J_AND", outputIndex: 0 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "J_AND", connector: "output", index: 0 },
+                    { x: { delta: GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "prev" }, y: "prev" },
+                    { x: { delta: -GraphicalWire.DEFAULT_ELEMENT_DISTANCE/2, from: "next" }, y: "next" },
+                    { name: "RSFLIPFLOP", connector: "input", index: 1 },
+                ]
+            },
+            {
+                name: "Q_to_K_AND",
+                element: new GraphicalWire("Q_to_K_AND0", initialValue),
+                height: "auto",
+                inputs: [{ name: "RSFLIPFLOP", outputIndex: 0 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "RSFLIPFLOP", connector: "output", index: 0 },
+                    { x: "prev", y: GraphicalOr.DEFAULT_HEIGHT/2 },
+                    { x: 7 * GraphicalWire.DEFAULT_ELEMENT_DISTANCE, y: GraphicalOr.DEFAULT_HEIGHT/2 },
+                    { x: 7 * GraphicalWire.DEFAULT_ELEMENT_DISTANCE, y: "next" },
+                    { name: "K_AND", connector: "input", index: 0 },
+                ]
+            },
+            {
+                name: "Qn_to_J_AND",
+                element: new GraphicalWire("Qn_to_J_AND0", initialValue),
+                height: "auto",
+                inputs: [{ name: "RSFLIPFLOP", outputIndex: 1 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "RSFLIPFLOP", connector: "output", index: 1 },
+                    { x: "prev", y: 6.5*GraphicalOr.DEFAULT_HEIGHT },
+                    { x: 7 * GraphicalWire.DEFAULT_ELEMENT_DISTANCE, y: 6.5 * GraphicalOr.DEFAULT_HEIGHT },
+                    { x: 7 * GraphicalWire.DEFAULT_ELEMENT_DISTANCE, y: "next" },
+                    { name: "J_AND", connector: "input", index: 2 },
+                ]
+            },
+            {
+                name: "RSFF_to_Q_SINK",
+                element: new GraphicalWire("RSFF_to_Q_SINK0", initialValue),
+                height: "auto",
+                inputs: [{ name: "RSFLIPFLOP", outputIndex: 0 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "RSFLIPFLOP", connector: "output", index: 0 },
+                    { name: "Q_SINK", connector: "input", index: 0 },
+                ]
+            },
+            {
+                name: "RSFF_to_Qn_SINK",
+                element: new GraphicalWire("RSFF_to_Qn_SINK0", initialValue),
+                height: "auto",
+                inputs: [{ name: "RSFLIPFLOP", outputIndex: 1 }],
+                externalOutputs: [],
+                coordinates: [
+                    { name: "RSFLIPFLOP", connector: "output", index: 1 },
+                    { name: "Qn_SINK", connector: "input", index: 0 },
+                ]
+            },
         ];
     }
 
@@ -352,6 +352,7 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
     }
 
     protected makeGraphics(elementHeight: number, coordinates: StubGraphicalElement.Coordinates[], dataSource: DataSource): PIXI.Graphics {
+
         this.outputValueReader = dataSource.getAddressValueReader(this.element.getOutputValueAddressProvider(0)());
 
         let graphics = new PIXI.Graphics();
@@ -412,7 +413,9 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
         graphics.addChild(textCLK);
         graphics.addChild(textQ);
         graphics.addChild(textQn);
+
         return graphics;
+
     }
 
     protected doRedraw(progress: number): void {
@@ -425,9 +428,10 @@ export class GraphicalJKFlipFlop extends CompactCombinedGraphicalElement {
         this.graphics.drawRect(0, 0, this.width, this.height);
 
         // draw rising edge triangle
-        this.graphics.moveTo(0,this.height/2 - this.height/10);
+        this.graphics.moveTo(0, this.height/2 - this.height/10);
         this.graphics.lineTo(this.width/6, this.height/2);
         this.graphics.lineTo(0, this.height/2 + this.height/10);
+
     }
 
 }
